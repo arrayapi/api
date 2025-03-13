@@ -15,7 +15,7 @@
     },
     "autoload": {
         "psr-4": {
-            "AA\\": "src/"
+            "ArrayApi\\": "src/"
         }
     },
     "require-dev": {

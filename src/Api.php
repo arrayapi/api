@@ -1,5 +1,5 @@
 <?php
-namespace Exrray;
+namespace ArrayApi;
 
 class Api
 {
@@ -21,28 +21,31 @@ class Api
     public static function walk(array &$array, callable $callback): void
     {
         foreach ($array as $key => &$value) {
+
+            $callback($value, $key);
+
             if (is_array($value)) {
                 static::walk($value, $callback);
             } else {
-                $callback($value, $key);
+                //$callback($value, $key);
             }
         }
     }
 
-    // public static function reduce(array &$array, callable $callback, mixed $initial = null): mixed
-    // {
-    //     $accumulator = $initial;
+    public static function reduce(array $array, callable $callback, mixed $initial = null): mixed
+    {
+        $accumulator = $initial;
 
-    //     foreach ($array as $key => &$value) {
-    //         if (is_array($value)) {
-    //             $value = static::reduce($value, $callback, $initial);
-    //         }
+        foreach ($array as $key => &$value) {
+            if (is_array($value)) {
+                $value = static::reduce($value, $callback, $initial);
+            }
 
-    //         $accumulator = $callback($accumulator, $value, $key);
+            $accumulator = $callback($accumulator, $value, $key);
 
-    //         unset($array[$key]);
-    //     }
+            unset($array[$key]);
+        }
 
-    //     return $accumulator;
-    // }
+        return $accumulator;
+    }
 }
